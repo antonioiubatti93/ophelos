@@ -43,3 +43,19 @@ func Test_Rate_Discount(t *testing.T) {
 		})
 	}
 }
+
+func Test_Rate_Shift(t *testing.T) {
+	t.Parallel()
+
+	const (
+		tm    = 0.5
+		value = 0.02
+		shift = 0.0001
+		tol   = 1.0e-15
+	)
+
+	r := NewRate(termstructure.NewFlat(value), NewSimpleDiscount())
+	shifted := r.Shift(shift)
+
+	assert.InDelta(t, r.Spot(tm)+shift, shifted.Spot(tm), tol)
+}
